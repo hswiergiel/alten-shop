@@ -7,11 +7,11 @@ Ce projet est une API Rest permettant de gérer les données d'une base de donn�
 - Java 21
 - Maven 4.0.0 ou supérieur
 - Docker pour l'hébergement de la base de données
-- PostgreSQL 16.0 (si souhaite d'heberger localement la bdd)
+- PostgreSQL 16.0 (si souhait d'hebergement local de la bdd)
 
 ### Configuration Docker
 
-- Le projet contient à la racine un `docker-compose.yaml`permettant de lancer la base de données sur un conteneur docker. Il est possible d'y modifier les informations relatives à la bdd :
+- Le projet contient à la racine un `docker-compose.yaml`permettant de lancer la base de données sur un conteneur docker. Pour l'utiliser, il est nécessaire d'ajouter les informations relatives à la bdd :
 
 ```yaml
      environment:
@@ -22,7 +22,7 @@ Ce projet est une API Rest permettant de gérer les données d'une base de donn�
       - "XXXX(Choix du port, 5432 par défaut):5432"
 ```
 
-- Le fichier `application.properties` situé dans le dossier main doit également être modifié:
+- Le fichier `application.properties` situé dans le dossier main/resources doit également être modifié:
 
 ```
 spring.datasource.url=jdbc:postgresql://localhost:XXXX/NOM_DB
@@ -31,23 +31,24 @@ spring.datasource.password=MOT_DE_PASSE_DB
 spring.datasource.driver-class-name=org.postgresql.Driver
 ```
 
-- Pour modifier le port de l'application back-end, ajouter `server.port=XXXX` au fichier `applications.properties`
-
 ### Configuration Postgres
 
 Pour ceux qui préfèrent héberger la base de données PostgreSQL localement plutôt que dans un conteneur Docker, voici les étapes à suivre :
 
 - Après l'installation de Postgres, ouvrir un terminal PostgreSQL et creer une nouvelle base de données en utilisant la commande suivante :
 
+```
 CREATE DATABASE NOM_BASE_DE_DONNNES;
 CREATE USER UTILISATEUR_BDD WITH PASSWORD 'MOT_DE_PASSE_BDD';
 GRANT ALL PRIVILEGES ON DATABASE NOM_BASE_DE_DONNNES TO UTILISATEUR_BDD;
+```
 
 - Mettre à jour le fichier applications.properties avec les nouvelles informations
 
 ### Lancement du projet 
 
 - Cloner le projet
+- Pour modifier le port de l'application back-end, ajouter `server.port=XXXX` au fichier `applications.properties`. Par défaut, l'application se lancera sur le port 8080.
 - Si utilisation de docker, utiliser la commande `docker-compose up` pour lancer le conteneur docker relatif à la base de données (ou `docker-compose up -d`pour un lancement en fond)
 - Lancer la commande `mvn spring-boot:run` pour lancer l'application back-end
 

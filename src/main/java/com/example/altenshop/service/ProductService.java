@@ -50,6 +50,14 @@ public class ProductService {
     public ProductEntity updateProduct(@NonNull Integer id, ProductRequest productRequest) {
         ProductEntity product = productRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Produit non trouvé avec l\'id " + id));
+
+        Optional<ProductEntity> productEntity = productRepository.findByCode(productRequest.getCode());
+
+        if (productEntity.isPresent() && !productRequest.getCode().equals(product.getCode())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "Produit déjà présent avec le code " + productRequest.getCode());
+        }
+        
         productMapper.updateProductEntity(productRequest, product);
         if (product == null) {
             throw new IllegalStateException("Erreur dans la requête");

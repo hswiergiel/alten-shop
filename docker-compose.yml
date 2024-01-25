@@ -3,11 +3,11 @@ services:
   postgres:
     image: postgres:latest
     environment:
-      POSTGRES_DB: alten
-      POSTGRES_USER: alten
-      POSTGRES_PASSWORD: alten
+      POSTGRES_DB: NOM_BASE_DE_DONNNES
+      POSTGRES_USER: UTILISATEUR_BDD
+      POSTGRES_PASSWORD: MOT_DE_PASSE_BDD
     ports:
-      - "5434:5432"
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 volumes:

@@ -2,7 +2,9 @@ package com.example.altenshop.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.altenshop.dto.ProductRequest;
+import com.example.altenshop.dto.ProductRequest.OnCreate;
+import com.example.altenshop.dto.ProductRequest.OnUpdate;
 import com.example.altenshop.model.ProductEntity;
 import com.example.altenshop.service.ProductService;
 
@@ -43,17 +47,20 @@ public class ProductController {
 
     @Operation(summary = "Crée un nouveau produit")
     @ApiResponse(responseCode = "200", description = "Création réussie du produit")
+    @ApiResponse(responseCode = "400", description = "Erreur dans la requête")
     @PostMapping
-    public ResponseEntity<ProductEntity> createProduct(@RequestBody ProductRequest productRequest) {
-        return ResponseEntity.ok(productService.createProduct(productRequest));
+    public ResponseEntity<ProductEntity> createProduct(@Validated(OnCreate.class) @RequestBody ProductRequest productRequest) {
+           ProductEntity createdProduct = productService.createProduct(productRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
     @Operation(summary = "Met à jour un produit")
     @ApiResponse(responseCode = "200", description = "Mise à jour réussie ")
     @ApiResponse(responseCode = "404", description = "Produit non trouvé")
+    @ApiResponse(responseCode = "400", description = "Erreur dans la requête")
     @PatchMapping("/{id}")
     public ResponseEntity<ProductEntity> updateProduct(@PathVariable Integer id,
-            @RequestBody ProductRequest productRequest) {
+            @Validated(OnUpdate.class) @RequestBody ProductRequest productRequest) {
         return ResponseEntity.ok(productService.updateProduct(id, productRequest));
     }
 
